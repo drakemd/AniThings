@@ -4,9 +4,10 @@ package edu.upi.cs.drake.anithings.view
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +15,11 @@ import android.view.ViewGroup
 import dagger.android.support.AndroidSupportInjection
 import edu.upi.cs.drake.anithings.R
 import edu.upi.cs.drake.anithings.common.InfiniteScrollListener
+import edu.upi.cs.drake.anithings.common.adapter.AdapterConstants
 import edu.upi.cs.drake.anithings.common.adapter.AnimeAdapter
 import edu.upi.cs.drake.anithings.common.model.AnimeListState
 import edu.upi.cs.drake.anithings.repository.model.AnimeData
+import edu.upi.cs.drake.anithings.repository.model.ListAnime
 import edu.upi.cs.drake.anithings.viewmodel.ViewModelFactory
 import edu.upi.cs.drake.anithings.viewmodel.PopularAnimeViewModel
 import kotlinx.android.synthetic.main.fragment_popular_anime.*
@@ -34,13 +37,21 @@ class PopularAnimeFragment : Fragment() {
     private var isLoading = false
     private var isLastPage = false
 
+    private var savedInstanceState: Bundle? = null
+
     private val stateObserver = Observer<AnimeListState> { state ->
         state?.let {
             isLastPage = state.loadedAllItems
             when (state) {
                 is AnimeListState.DefaultState -> {
                     isLoading = false
-                    addAnime(state.data)
+                    if(savedInstanceState!=null&& savedInstanceState!!.containsKey(KEY_ANIME)){
+                        val listAnime = savedInstanceState!!.get(KEY_ANIME) as ListAnime
+                        (anime_list.adapter as AnimeAdapter).clearAndAddAnime(listAnime.data)
+                        savedInstanceState = null
+                    }else{
+                        addAnime(state.newData)
+                    }
                 }
                 is AnimeListState.LoadingState -> {
                     isLoading = true
@@ -56,16 +67,27 @@ class PopularAnimeFragment : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        this.savedInstanceState = savedInstanceState
         super.onActivityCreated(savedInstanceState)
 
+        var layoutGrid = GridLayoutManager(context, 2)
+        layoutGrid = setLayoutManager(layoutGrid)
+
         anime_list.apply {
-            setHasFixedSize(true)
-            val linearLayout = LinearLayoutManager(context)
-            layoutManager = linearLayout
+            layoutManager = layoutGrid
             clearOnScrollListeners()
-            addOnScrollListener(InfiniteScrollListener( {popularAnimeViewModel.updateAnimeList()} , linearLayout))
+            addOnScrollListener(InfiniteScrollListener( {popularAnimeViewModel.updateAnimeList()} , layoutGrid))
         }
         initAdapter()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val anime = (anime_list.adapter as AnimeAdapter).getAnime()
+        val listAnime = ListAnime(anime)
+        if(anime.isNotEmpty()){
+            outState.putParcelable(KEY_ANIME, listAnime.copy(data = anime))
+        }
     }
 
     private fun initAdapter() {
@@ -107,4 +129,34 @@ class PopularAnimeFragment : Fragment() {
         (anime_list.adapter as AnimeAdapter).addAnime(anime)
     }
 
+    fun setLayoutManager(layoutGrid: GridLayoutManager): GridLayoutManager{
+
+        val layout = layoutGrid
+        val orientation = resources.configuration.orientation
+
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            layout.spanCount = 6
+        }else{
+            layout.spanCount = 3
+        }
+
+        layout.setSpanSizeLookup(object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                when (anime_list.adapter.getItemViewType(position)) {
+                    AdapterConstants.LOADING ->{
+                        return layout.spanCount
+                    }
+                    else ->{
+                        return 1
+                    }
+                }
+            }
+        })
+
+        return layout
+    }
+
+    companion object {
+        private const val KEY_ANIME = "anime"
+    }
 }// Required empty public constructor

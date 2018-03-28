@@ -21,24 +21,24 @@ class PopularAnimeViewModel @Inject constructor(val popularAnimeUseCase: IPopula
     val stateLiveData =  MutableLiveData<AnimeListState>()
 
     init {
-        stateLiveData.value = AnimeListState.DefaultState(0, false, emptyList())
+        stateLiveData.value = AnimeListState.DefaultState(0, false, emptyList(), emptyList())
     }
 
     fun updateAnimeList() {
         val pageNum = obtainCurrentPageNum()
-        AnimeListState.LoadingState(pageNum, false, obtainCurrentData())
+        AnimeListState.LoadingState(pageNum, false, obtainCurrentData(), emptyList())
         getAnimeList(pageNum)
     }
 
     fun resetAnimeList() {
         val pageNum = 0
-        stateLiveData.value = AnimeListState.LoadingState(pageNum, false, emptyList())
+        stateLiveData.value = AnimeListState.LoadingState(pageNum, false, emptyList(), emptyList())
         updateAnimeList()
     }
 
     fun restoreAnimeList() {
         val pageNum = obtainCurrentPageNum()
-        stateLiveData.value = AnimeListState.DefaultState(pageNum, false, obtainCurrentData())
+        stateLiveData.value = AnimeListState.DefaultState(pageNum, false, obtainCurrentData(), emptyList())
     }
 
     private fun getAnimeList(page:Int){
@@ -53,18 +53,18 @@ class PopularAnimeViewModel @Inject constructor(val popularAnimeUseCase: IPopula
         val currentPageNum = obtainCurrentPageNum() + 1
         val areAllItemsLoaded = animeList.size > 89
         currentAnimeList.addAll(animeList)
-        stateLiveData.value = AnimeListState.DefaultState(currentPageNum, areAllItemsLoaded, animeList)
+        stateLiveData.value = AnimeListState.DefaultState(currentPageNum, areAllItemsLoaded, currentAnimeList, animeList)
     }
 
     private fun onError(error: Throwable) {
         val pageNum = stateLiveData.value?.pageNum ?: 0
         stateLiveData.value = AnimeListState.ErrorState(error.message
-                ?: "", pageNum, obtainCurrentLoadedAllItems(), obtainCurrentData())
+                ?: "", pageNum, obtainCurrentLoadedAllItems(), obtainCurrentData(), emptyList())
     }
 
     private fun obtainCurrentPageNum() = stateLiveData.value?.pageNum ?: 0
 
-    private fun obtainCurrentData() = stateLiveData.value?.data ?: emptyList()
+    private fun obtainCurrentData() = stateLiveData.value?.allData ?: emptyList()
 
     private fun obtainCurrentLoadedAllItems() = stateLiveData.value?.loadedAllItems ?: false
 }
