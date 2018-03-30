@@ -12,6 +12,7 @@ interface IAnimeApi {
     fun getPopularAnime(
                 @Query("sort") sortBy: String,
                 @Query("page[limit]") limit: Int,
-                @Query("page[offset]") offset: Int):
+                @Query("page[offset]") offset: Int,
+                @Query("filter[status]") status: String):
             Single<KitsuAnimeResponse>
 }

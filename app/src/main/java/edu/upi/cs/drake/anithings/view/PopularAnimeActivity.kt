@@ -1,5 +1,6 @@
 package edu.upi.cs.drake.anithings.view
 
+import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -25,16 +26,13 @@ class PopularAnimeActivity : AppCompatActivity(), HasSupportFragmentInjector {
         }
     }
 
+    @SuppressLint("PrivateResource")
     fun changeFragment(fragment: Fragment, cleanStack: Boolean = false){
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         if (cleanStack){
             clearBackStack()
         }
-
-        fragmentTransaction.setCustomAnimations(
-                R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_popup_enter, R.anim.abc_popup_exit
-        )
 
         fragmentTransaction.replace(R.id.activity_base_content, fragment)
         fragmentTransaction.addToBackStack(null)

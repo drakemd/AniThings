@@ -1,23 +1,31 @@
 package edu.upi.cs.drake.anithings.view
 
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.transition.Fade
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import dagger.android.support.AndroidSupportInjection
 import edu.upi.cs.drake.anithings.R
 import edu.upi.cs.drake.anithings.common.InfiniteScrollListener
 import edu.upi.cs.drake.anithings.common.adapter.AdapterConstants
 import edu.upi.cs.drake.anithings.common.adapter.AnimeAdapter
+import edu.upi.cs.drake.anithings.common.adapter.RecyclerViewOnClickListener
 import edu.upi.cs.drake.anithings.common.model.AnimeListState
+import edu.upi.cs.drake.anithings.detail.AnimeDetail
 import edu.upi.cs.drake.anithings.repository.model.AnimeData
 import edu.upi.cs.drake.anithings.repository.model.ListAnime
 import edu.upi.cs.drake.anithings.viewmodel.ViewModelFactory
@@ -29,10 +37,13 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class PopularAnimeFragment : Fragment() {
+class PopularAnimeFragment : Fragment(), RecyclerViewOnClickListener {
+
+    val TAG = "ListAnimeFragment"
 
     @Inject lateinit var viewModelFactory: ViewModelFactory
-    lateinit var popularAnimeViewModel: PopularAnimeViewModel
+    private lateinit var popularAnimeViewModel: PopularAnimeViewModel
+    private lateinit var animeRecyclerView: RecyclerView
 
     private var isLoading = false
     private var isLastPage = false
@@ -45,18 +56,10 @@ class PopularAnimeFragment : Fragment() {
             when (state) {
                 is AnimeListState.DefaultState -> {
                     isLoading = false
-                    if(savedInstanceState!=null&& savedInstanceState!!.containsKey(KEY_ANIME)){
-                        val listAnime = savedInstanceState!!.get(KEY_ANIME) as ListAnime
-                        (anime_list.adapter as AnimeAdapter).clearAndAddAnime(listAnime.data)
-                        savedInstanceState = null
-                    }else{
-                        addAnime(state.newData)
-                    }
+                    addAnime(state.newData)
                 }
                 is AnimeListState.LoadingState -> {
                     isLoading = true
-                    Log.d("success1", state.pageNum.toString())
-                    Log.d("success1", "loadning")
                 }
                 is AnimeListState.ErrorState -> {
                     isLoading = false
@@ -70,10 +73,11 @@ class PopularAnimeFragment : Fragment() {
         this.savedInstanceState = savedInstanceState
         super.onActivityCreated(savedInstanceState)
 
-        var layoutGrid = GridLayoutManager(context, 2)
+        var layoutGrid = GridLayoutManager(context, 3)
         layoutGrid = setLayoutManager(layoutGrid)
+        animeRecyclerView = anime_list
 
-        anime_list.apply {
+        animeRecyclerView.apply {
             layoutManager = layoutGrid
             clearOnScrollListeners()
             addOnScrollListener(InfiniteScrollListener( {popularAnimeViewModel.updateAnimeList()} , layoutGrid))
@@ -81,9 +85,13 @@ class PopularAnimeFragment : Fragment() {
         initAdapter()
     }
 
+    override fun onClick(view: View, position: Int) {
+        startDetailActivity((animeRecyclerView.adapter as AnimeAdapter).getAnime()[position], view)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val anime = (anime_list.adapter as AnimeAdapter).getAnime()
+        val anime = (animeRecyclerView.adapter as AnimeAdapter).getAnime()
         val listAnime = ListAnime(anime)
         if(anime.isNotEmpty()){
             outState.putParcelable(KEY_ANIME, listAnime.copy(data = anime))
@@ -91,9 +99,8 @@ class PopularAnimeFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        if(anime_list.adapter == null){
-            Log.d("NFragment", "adapter null")
-            anime_list.adapter = AnimeAdapter()
+        if(animeRecyclerView.adapter == null){
+            animeRecyclerView.adapter = AnimeAdapter(this)
         }
     }
 
@@ -121,39 +128,55 @@ class PopularAnimeFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_popular_anime, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_popular_anime, container, false)
     }
 
-    fun addAnime(anime: List<AnimeData>){
-        (anime_list.adapter as AnimeAdapter).addAnime(anime)
-    }
-
-    fun setLayoutManager(layoutGrid: GridLayoutManager): GridLayoutManager{
-
-        val layout = layoutGrid
-        val orientation = resources.configuration.orientation
-
-        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-            layout.spanCount = 6
+    private fun addAnime(anime: List<AnimeData>){
+        if(savedInstanceState!=null&& savedInstanceState!!.containsKey(KEY_ANIME)){
+            val listAnime = savedInstanceState!!.get(KEY_ANIME) as ListAnime
+            (animeRecyclerView.adapter as AnimeAdapter).clearAndAddAnime(listAnime.data)
+            savedInstanceState = null
         }else{
-            layout.spanCount = 3
+            (animeRecyclerView.adapter as AnimeAdapter).addAnime(anime)
         }
+    }
 
-        layout.setSpanSizeLookup(object : GridLayoutManager.SpanSizeLookup() {
+    private fun setLayoutManager(layoutGrid: GridLayoutManager): GridLayoutManager{
+
+        val orientation = resources.configuration.orientation
+        layoutGrid.spanCount = if(orientation == Configuration.ORIENTATION_LANDSCAPE) 5 else 3
+
+        layoutGrid.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                when (anime_list.adapter.getItemViewType(position)) {
-                    AdapterConstants.LOADING ->{
-                        return layout.spanCount
-                    }
-                    else ->{
-                        return 1
-                    }
+                return when (animeRecyclerView.adapter.getItemViewType(position)) {
+                    AdapterConstants.LOADING -> layoutGrid.spanCount
+                    else -> 1
                 }
             }
-        })
+        }
 
-        return layout
+        return layoutGrid
+    }
+
+    private fun startDetailActivity(anime: AnimeData, view: View){
+
+        Log.d("animedebug", anime.attributes.canonicalTitle)
+
+        val container = activity
+        val bundle = Bundle()
+        bundle.putParcelable("ANIME", anime)
+        val intent = Intent(container, AnimeDetail::class.java)
+        intent.putExtra("BUNDLE", bundle)
+
+        intent.putExtra("SHARED_ELEMENT_NAME", anime.attributes.canonicalTitle)
+
+        val thumbnail = view.findViewById<ImageView>(R.id.thumbnail)
+
+        val pair = android.support.v4.util.Pair.create(thumbnail as View, anime.attributes.canonicalTitle)
+        Log.d("shared1", anime.attributes.canonicalTitle)
+        val options = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(container as Activity, pair)
+        startActivity(intent, options.toBundle())
     }
 
     companion object {

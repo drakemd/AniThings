@@ -2,8 +2,6 @@ package edu.upi.cs.drake.anithings.repository.api
 
 import dagger.Module
 import dagger.Provides
-import edu.upi.cs.drake.anithings.repository.api.IAnimeApi
-import edu.upi.cs.drake.anithings.repository.api.AnimeDbService
 import edu.upi.cs.drake.anithings.repository.IAnimeDbService
 import javax.inject.Singleton
 

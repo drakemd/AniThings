@@ -3,4 +3,22 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_anime_detail">AnimeDetail</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- used as tags for shared element transitions -->
+    <string name="transition_thumbnail">thumbnail</string>
+    <string name="transition_title">title</string>
+    <string name="transition_time_and_date">date</string>
+    <string name="title_toolbar">List Activity</string>
+    <string name="rating">Rating</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="show_type">Show type</string>
+    <string name="episode">Episode</string>
+    <string name="duration">Duration</string>
+    <string name="status">Status</string>
+    <string name="poster_image">Poster Image</string>
+    <string name="cover_image">Cover Image</string>
+    <string name="poster_image">Poster Image</string>
 </resources>

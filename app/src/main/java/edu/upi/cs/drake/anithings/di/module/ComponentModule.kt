@@ -2,6 +2,7 @@ package edu.upi.cs.drake.anithings.di.module
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import edu.upi.cs.drake.anithings.detail.AnimeDetail
 import edu.upi.cs.drake.anithings.view.PopularAnimeActivity
 import edu.upi.cs.drake.anithings.view.PopularAnimeFragment
 
@@ -17,4 +18,7 @@ abstract class ComponentModule {
 
     @ContributesAndroidInjector
     internal abstract fun bindPopularAnimeFragment(): PopularAnimeFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun bindAnimeDetailActivity(): AnimeDetail
 }

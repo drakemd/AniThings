@@ -8,4 +8,9 @@ import edu.upi.cs.drake.anithings.repository.model.AnimeData
  *
  */
 
-class KitsuAnimeResponse(@Json(name = "data") val data: List<AnimeData>)
+class KitsuAnimeResponse(@Json(name = "data") val data: List<AnimeData>,
+                         @Json(name = "included") val included: List<GenreResponse>)
+
+class GenreResponse(@Json(name = "data") val id: Int, @Json(name = "attributes") val genreattresponse: GenreAttResponse)
+
+class GenreAttResponse(@Json(name = "name") val name: String)

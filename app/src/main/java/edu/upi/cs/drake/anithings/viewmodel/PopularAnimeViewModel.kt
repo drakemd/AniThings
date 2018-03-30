@@ -14,7 +14,7 @@ import javax.inject.Inject
  * Created by drake on 3/27/2018.
  *
  */
-class PopularAnimeViewModel @Inject constructor(val popularAnimeUseCase: IPopularAnimeUseCase): ViewModel() {
+class PopularAnimeViewModel @Inject constructor(private val popularAnimeUseCase: IPopularAnimeUseCase): ViewModel() {
 
     @Inject lateinit var api: IAnimeApi
 

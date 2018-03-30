@@ -8,6 +8,6 @@
 
     <ProgressBar
         android:id="@+id/progress"
-        android:layout_width="40dp"
-        android:layout_height="40dp" />
+        android:layout_width="@dimen/loading_item_size"
+        android:layout_height="@dimen/loading_item_size" />
 </LinearLayout>

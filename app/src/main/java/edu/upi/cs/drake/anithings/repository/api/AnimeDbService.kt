@@ -1,6 +1,5 @@
 package edu.upi.cs.drake.anithings.repository.api
 
-import android.util.Log
 import edu.upi.cs.drake.anithings.repository.IAnimeDbService
 import io.reactivex.Single
 import javax.inject.Inject
@@ -11,6 +10,6 @@ import javax.inject.Inject
  */
 class AnimeDbService @Inject constructor(val api: IAnimeApi): IAnimeDbService {
     override fun getPopularAnime(sortBy: String, limit: Int, offset: Int): Single<KitsuAnimeResponse> {
-        return api.getPopularAnime(sortBy, limit, offset)
+        return api.getPopularAnime(sortBy, limit, offset, "current")
     }
 }

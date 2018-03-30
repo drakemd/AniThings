@@ -9,10 +9,11 @@ import edu.upi.cs.drake.anithings.repository.model.AnimeData
  * Created by drake on 3/28/2018.
  * anime adapter (RecyclerView.Adapter) created from delegates adapter
  */
-class AnimeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: ArrayList<ViewType>
     private var delegateAdapter = SparseArrayCompat<ViewTypeDelegateAdapter>()
+
 
     private val loadingItem = object: ViewType{
         override fun getViewType() = AdapterConstants.LOADING
@@ -20,7 +21,7 @@ class AnimeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         delegateAdapter.put(AdapterConstants.LOADING, LoadingDelegateAdapter())
-        delegateAdapter.put(AdapterConstants.ANIME, AnimeDelegateAdapter())
+        delegateAdapter.put(AdapterConstants.ANIME, AnimeDelegateAdapter(listener))
         items = ArrayList()
         items.add(loadingItem)
     }
