@@ -12,6 +12,7 @@ import android.transition.TransitionInflater
 import android.widget.TextView
 import edu.upi.cs.drake.anithings.common.extensions.loadImg
 import edu.upi.cs.drake.anithings.repository.model.AnimeData
+import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
 import kotlinx.android.synthetic.main.appbar.*
 import kotlinx.android.synthetic.main.content_detail.*
 
@@ -30,7 +31,7 @@ class AnimeDetail : AppCompatActivity(){
         initCollapsingToolbar()
 
         val b = intent?.getBundleExtra("BUNDLE")
-        val anime = b?.getParcelable<AnimeData>("ANIME")
+        val anime = b?.getParcelable<NewAnimeData>("ANIME")
         val sharedViewName = intent?.extras?.get("SHARED_ELEMENT_NAME").toString()
         val transition = TransitionInflater.from(this).inflateTransition(R.transition.shared_element_transition)
         window.sharedElementEnterTransition = transition
@@ -39,17 +40,17 @@ class AnimeDetail : AppCompatActivity(){
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setView(anime: AnimeData?, sharedViewName: String){
+    private fun setView(anime: NewAnimeData?, sharedViewName: String){
 
         thumbnail.transitionName = sharedViewName
 
-        anime?.attributes?.let {
+        anime?.let {
             animeTitle = it.canonicalTitle
-            backdrop.loadImg(it.coverImage.original)
-            thumbnail.loadImg(it.posterImage.small)
+            it.coverImage?.let { it1 -> backdrop.loadImg(it1) }
+            thumbnail.loadImg(it.posterImage)
             title.text = it.canonicalTitle
             overview.text = it.synopsis
-            rating.text =  it.averageRating + "/10"
+            rating.text =  it.averageRating?:"N/A"
         }
     }
 

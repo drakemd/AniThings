@@ -20,7 +20,7 @@ class AnimeDataResponse(@Json(name = "id") val id: Int,
 class AnimeAttributesResponse(@Json(name = "canonicalTitle") val canonicalTitle: String,
                               @Json(name = "titles") val titles: TitlesResponse,
                               @Json(name = "synopsis") val synopsis: String,
-                              @Json(name = "averageRating") val averageRating: Double?,
+                              @Json(name = "averageRating") val averageRating: String?,
                               @Json(name = "startDate") val startDate: String?,
                               @Json(name = "endDate") val endDate: String?,
                               @Json(name = "popularityRank") val popularityRank: Int,
@@ -34,7 +34,7 @@ class AnimeAttributesResponse(@Json(name = "canonicalTitle") val canonicalTitle:
                               @Json(name = "coverImage") val coverImage: CoverImageResponse?,
                               @Json(name = "episodeCount") val episodeCount: Int?,
                               @Json(name = "episodeLength") val episodeLength: Int?,
-                              @Json(name = "youtubeVideoId") val youtubeVideoId: String,
+                              @Json(name = "youtubeVideoId") val youtubeVideoId: String?,
                               @Json(name = "showType") val showType: String,
                               @Json(name = "nsfw") val nsfw: Boolean
 )

@@ -11,7 +11,7 @@ data class NewAnimeData(
         var id: Int,
         var canonicalTitle: String,
         var synopsis: String,
-        var averageRating: Double?,
+        var averageRating: String?,
         var startDate: String?,
         var endDate: String?,
         var popularityRank: Int,
@@ -22,7 +22,7 @@ data class NewAnimeData(
         var genres: List<Int>,
         var posterImage: String,
         var coverImage: String?,
-        var youtubeVideoId: String,
+        var youtubeVideoId: String?,
         var showType: String
 ): ViewType, Parcelable {
 
@@ -30,7 +30,7 @@ data class NewAnimeData(
             parcel.readInt(),
             parcel.readString(),
             parcel.readString(),
-            parcel.readValue(Double::class.java.classLoader) as? Double,
+            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readInt(),
@@ -53,7 +53,7 @@ data class NewAnimeData(
         parcel.writeInt(id)
         parcel.writeString(canonicalTitle)
         parcel.writeString(synopsis)
-        parcel.writeValue(averageRating)
+        parcel.writeString(averageRating)
         parcel.writeString(startDate)
         parcel.writeString(endDate)
         parcel.writeInt(popularityRank)
