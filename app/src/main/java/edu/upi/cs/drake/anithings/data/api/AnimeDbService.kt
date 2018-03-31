@@ -1,6 +1,7 @@
-package edu.upi.cs.drake.anithings.repository.api
+package edu.upi.cs.drake.anithings.data.api
 
-import edu.upi.cs.drake.anithings.repository.IAnimeDbService
+import edu.upi.cs.drake.anithings.data.IAnimeDbService
+import edu.upi.cs.drake.anithings.data.api.model.KitsuAnimeResponse
 import io.reactivex.Single
 import javax.inject.Inject
 

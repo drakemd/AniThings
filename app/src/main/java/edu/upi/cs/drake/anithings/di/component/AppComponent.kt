@@ -8,7 +8,7 @@ import edu.upi.cs.drake.anithings.common.domain.UseCaseModule
 import edu.upi.cs.drake.anithings.di.module.AppModule
 import edu.upi.cs.drake.anithings.di.module.ComponentModule
 import edu.upi.cs.drake.anithings.di.module.NetworkModule
-import edu.upi.cs.drake.anithings.repository.api.ApiModule
+import edu.upi.cs.drake.anithings.data.api.ApiModule
 import javax.inject.Singleton
 
 /**

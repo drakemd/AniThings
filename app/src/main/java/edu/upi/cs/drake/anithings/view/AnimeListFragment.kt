@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.transition.Fade
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,8 +25,8 @@ import edu.upi.cs.drake.anithings.common.adapter.AnimeAdapter
 import edu.upi.cs.drake.anithings.common.adapter.RecyclerViewOnClickListener
 import edu.upi.cs.drake.anithings.common.model.AnimeListState
 import edu.upi.cs.drake.anithings.detail.AnimeDetail
-import edu.upi.cs.drake.anithings.repository.model.AnimeData
 import edu.upi.cs.drake.anithings.repository.model.ListAnime
+import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
 import edu.upi.cs.drake.anithings.viewmodel.ViewModelFactory
 import edu.upi.cs.drake.anithings.viewmodel.PopularAnimeViewModel
 import kotlinx.android.synthetic.main.fragment_popular_anime.*
@@ -37,7 +36,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class PopularAnimeFragment : Fragment(), RecyclerViewOnClickListener {
+class AnimeListFragment : Fragment(), RecyclerViewOnClickListener {
 
     val TAG = "ListAnimeFragment"
 
@@ -131,7 +130,7 @@ class PopularAnimeFragment : Fragment(), RecyclerViewOnClickListener {
         return inflater.inflate(R.layout.fragment_popular_anime, container, false)
     }
 
-    private fun addAnime(anime: List<AnimeData>){
+    private fun addAnime(anime: List<NewAnimeData>){
         if(savedInstanceState!=null&& savedInstanceState!!.containsKey(KEY_ANIME)){
             val listAnime = savedInstanceState!!.get(KEY_ANIME) as ListAnime
             (animeRecyclerView.adapter as AnimeAdapter).clearAndAddAnime(listAnime.data)
@@ -158,9 +157,9 @@ class PopularAnimeFragment : Fragment(), RecyclerViewOnClickListener {
         return layoutGrid
     }
 
-    private fun startDetailActivity(anime: AnimeData, view: View){
+    private fun startDetailActivity(anime: NewAnimeData, view: View){
 
-        Log.d("animedebug", anime.attributes.canonicalTitle)
+        Log.d("animedebug", anime.canonicalTitle)
 
         val container = activity
         val bundle = Bundle()
@@ -168,12 +167,12 @@ class PopularAnimeFragment : Fragment(), RecyclerViewOnClickListener {
         val intent = Intent(container, AnimeDetail::class.java)
         intent.putExtra("BUNDLE", bundle)
 
-        intent.putExtra("SHARED_ELEMENT_NAME", anime.attributes.canonicalTitle)
+        intent.putExtra("SHARED_ELEMENT_NAME", anime.canonicalTitle)
 
         val thumbnail = view.findViewById<ImageView>(R.id.thumbnail)
 
-        val pair = android.support.v4.util.Pair.create(thumbnail as View, anime.attributes.canonicalTitle)
-        Log.d("shared1", anime.attributes.canonicalTitle)
+        val pair = android.support.v4.util.Pair.create(thumbnail as View, anime.canonicalTitle)
+        Log.d("shared1", anime.canonicalTitle)
         val options = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(container as Activity, pair)
         startActivity(intent, options.toBundle())

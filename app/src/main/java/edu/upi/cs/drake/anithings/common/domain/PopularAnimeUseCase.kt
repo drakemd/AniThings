@@ -1,7 +1,7 @@
 package edu.upi.cs.drake.anithings.common.domain
 
-import edu.upi.cs.drake.anithings.repository.IAnimeDbService
-import edu.upi.cs.drake.anithings.repository.model.AnimeData
+import edu.upi.cs.drake.anithings.data.IAnimeDbService
+import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -18,8 +18,30 @@ class PopularAnimeUseCase @Inject constructor(private val IAnimeDbService: IAnim
 
     private val limit = 15
 
-    override fun getPopularAnimeByPage(page: Int): Single<List<AnimeData>> {
+    override fun getPopularAnimeByPage(page: Int): Single<List<NewAnimeData>> {
         return IAnimeDbService.getPopularAnime("popularityRank", limit, page*limit)
-                .map { it -> it.data }
+                .map {
+                    val item = it
+                    it.data.map {
+                        NewAnimeData(
+                                it.id,
+                                it.attributes.canonicalTitle,
+                                it.attributes.synopsis,
+                                it.attributes.averageRating,
+                                it.attributes.startDate,
+                                it.attributes.endDate,
+                                it.attributes.popularityRank,
+                                it.attributes.ratingRank,
+                                it.attributes.ageRating,
+                                it.attributes.ageRatingGuide,
+                                it.attributes.status,
+                                it.relationships.genres.data.map { it.id },
+                                it.attributes.posterImage.small,
+                                it.attributes.coverImage?.original?:"n/a",
+                                it.attributes.youtubeVideoId,
+                                it.attributes.showType
+                                )
+                    }
+                }
     }
 }

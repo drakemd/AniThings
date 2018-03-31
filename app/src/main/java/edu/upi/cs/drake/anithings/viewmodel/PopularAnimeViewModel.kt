@@ -2,10 +2,11 @@ package edu.upi.cs.drake.anithings.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import edu.upi.cs.drake.anithings.repository.api.IAnimeApi
+import edu.upi.cs.drake.anithings.data.api.IAnimeApi
 import edu.upi.cs.drake.anithings.common.domain.IPopularAnimeUseCase
 import edu.upi.cs.drake.anithings.repository.model.AnimeData
 import edu.upi.cs.drake.anithings.common.model.AnimeListState
+import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -48,7 +49,7 @@ class PopularAnimeViewModel @Inject constructor(private val popularAnimeUseCase:
                 .subscribe(this::onAnimeListReceived, this::onError)
     }
 
-    private fun onAnimeListReceived(animeList: List<AnimeData>) {
+    private fun onAnimeListReceived(animeList: List<NewAnimeData>) {
         val currentAnimeList = obtainCurrentData().toMutableList()
         val currentPageNum = obtainCurrentPageNum() + 1
         val areAllItemsLoaded = animeList.size > 89

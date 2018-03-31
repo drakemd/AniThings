@@ -12,9 +12,10 @@ import dagger.android.support.HasSupportFragmentInjector
 import edu.upi.cs.drake.anithings.R
 import javax.inject.Inject
 
-class PopularAnimeActivity : AppCompatActivity(), HasSupportFragmentInjector {
+class AnimeListActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -22,7 +23,7 @@ class PopularAnimeActivity : AppCompatActivity(), HasSupportFragmentInjector {
         setContentView(R.layout.activity_popular_anime)
 
         if(savedInstanceState == null){
-            changeFragment(PopularAnimeFragment())
+            changeFragment(AnimeListFragment())
         }
     }
 

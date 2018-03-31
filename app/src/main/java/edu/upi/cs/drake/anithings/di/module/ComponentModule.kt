@@ -3,8 +3,8 @@ package edu.upi.cs.drake.anithings.di.module
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import edu.upi.cs.drake.anithings.detail.AnimeDetail
-import edu.upi.cs.drake.anithings.view.PopularAnimeActivity
-import edu.upi.cs.drake.anithings.view.PopularAnimeFragment
+import edu.upi.cs.drake.anithings.view.AnimeListActivity
+import edu.upi.cs.drake.anithings.view.AnimeListFragment
 
 /**
  * Created by drake on 3/27/2018.
@@ -14,10 +14,10 @@ import edu.upi.cs.drake.anithings.view.PopularAnimeFragment
 @Module
 abstract class ComponentModule {
     @ContributesAndroidInjector
-    internal abstract fun bindPopularAnimeActivity(): PopularAnimeActivity
+    internal abstract fun bindPopularAnimeActivity(): AnimeListActivity
 
     @ContributesAndroidInjector
-    internal abstract fun bindPopularAnimeFragment(): PopularAnimeFragment
+    internal abstract fun bindPopularAnimeFragment(): AnimeListFragment
 
     @ContributesAndroidInjector
     internal abstract fun bindAnimeDetailActivity(): AnimeDetail

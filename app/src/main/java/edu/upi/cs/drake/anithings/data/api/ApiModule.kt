@@ -1,8 +1,8 @@
-package edu.upi.cs.drake.anithings.repository.api
+package edu.upi.cs.drake.anithings.data.api
 
 import dagger.Module
 import dagger.Provides
-import edu.upi.cs.drake.anithings.repository.IAnimeDbService
+import edu.upi.cs.drake.anithings.data.IAnimeDbService
 import javax.inject.Singleton
 
 /**

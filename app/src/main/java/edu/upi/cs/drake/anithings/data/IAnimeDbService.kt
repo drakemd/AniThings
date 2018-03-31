@@ -1,6 +1,6 @@
-package edu.upi.cs.drake.anithings.repository
+package edu.upi.cs.drake.anithings.data
 
-import edu.upi.cs.drake.anithings.repository.api.KitsuAnimeResponse
+import edu.upi.cs.drake.anithings.data.api.model.KitsuAnimeResponse
 import io.reactivex.Single
 
 /**

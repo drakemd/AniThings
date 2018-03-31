@@ -8,11 +8,11 @@ import android.os.Parcelable
  *
  */
 
-data class ListAnime(val data: List<AnimeData>): Parcelable{
+data class ListAnime(val data: List<NewAnimeData>): Parcelable{
 
     private constructor(parcelIn: Parcel): this(
-            mutableListOf<AnimeData>().apply {
-                parcelIn.readTypedList(this, AnimeData.CREATOR)
+            mutableListOf<NewAnimeData>().apply {
+                parcelIn.readTypedList(this, NewAnimeData.CREATOR)
             }
     )
 

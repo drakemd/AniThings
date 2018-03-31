@@ -1,6 +1,7 @@
 package edu.upi.cs.drake.anithings.common.extensions
 
 import android.graphics.drawable.Drawable
+import android.os.Parcel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,4 +27,18 @@ fun ImageView.loadImgTransition(imgUrl: String, requestListener: RequestListener
             .load(imgUrl)
             .listener(requestListener)
             .into(this)
+}
+
+fun Parcel.writeIntList(input:List<Int>) {
+    writeInt(input.size) // Save number of elements.
+    input.forEach(this::writeInt) // Save each element.
+}
+
+fun Parcel.createIntList() : List<Int> {
+    val size = readInt()
+    val output = ArrayList<Int>(size)
+    for (i in 0 until size) {
+        output.add(readInt())
+    }
+    return output
 }
