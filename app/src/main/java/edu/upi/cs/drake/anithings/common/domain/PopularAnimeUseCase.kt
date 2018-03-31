@@ -1,7 +1,8 @@
 package edu.upi.cs.drake.anithings.common.domain
 
 import edu.upi.cs.drake.anithings.data.IAnimeDbService
-import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
+import edu.upi.cs.drake.anithings.data.api.model.AnimeDataResponse
+import edu.upi.cs.drake.anithings.data.local.NewAnimeData
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -20,28 +21,27 @@ class PopularAnimeUseCase @Inject constructor(private val IAnimeDbService: IAnim
 
     override fun getPopularAnimeByPage(page: Int): Single<List<NewAnimeData>> {
         return IAnimeDbService.getPopularAnime("popularityRank", limit, page*limit)
-                .map {
-                    val item = it
-                    it.data.map {
-                        NewAnimeData(
-                                it.id,
-                                it.attributes.canonicalTitle,
-                                it.attributes.synopsis,
-                                it.attributes.averageRating,
-                                it.attributes.startDate,
-                                it.attributes.endDate,
-                                it.attributes.popularityRank,
-                                it.attributes.ratingRank,
-                                it.attributes.ageRating,
-                                it.attributes.ageRatingGuide,
-                                it.attributes.status,
-                                it.relationships.genres.data.map { it.id },
-                                it.attributes.posterImage.small,
-                                it.attributes.coverImage?.original?:"n/a",
-                                it.attributes.youtubeVideoId,
-                                it.attributes.showType
-                                )
-                    }
-                }
+                .map { it.data.map { mapRawToEntity(it) } }
+    }
+
+    fun mapRawToEntity(it: AnimeDataResponse): NewAnimeData{
+        return NewAnimeData(
+                it.id,
+                it.attributes.canonicalTitle,
+                it.attributes.synopsis,
+                it.attributes.averageRating,
+                it.attributes.startDate,
+                it.attributes.endDate,
+                it.attributes.popularityRank,
+                it.attributes.ratingRank,
+                it.attributes.ageRating,
+                it.attributes.ageRatingGuide,
+                it.attributes.status,
+                it.relationships.genres.data.map { it.id },
+                it.attributes.posterImage.small,
+                it.attributes.coverImage?.original ?: "n/a",
+                it.attributes.youtubeVideoId,
+                it.attributes.showType
+        )
     }
 }

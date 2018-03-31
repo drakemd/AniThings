@@ -3,7 +3,7 @@ package edu.upi.cs.drake.anithings.common.adapter
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
+import edu.upi.cs.drake.anithings.data.local.NewAnimeData
 
 /**
  * Created by drake on 3/28/2018.
@@ -63,7 +63,7 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
 
     fun getAnime(): List<NewAnimeData> = items
             .filter { it.getViewType() == AdapterConstants.ANIME }
-            .map { it as NewAnimeData}
+            .map { it as NewAnimeData }
 
     private fun getLastPosition() = if(items.lastIndex == -1) 0 else items.lastIndex
 }

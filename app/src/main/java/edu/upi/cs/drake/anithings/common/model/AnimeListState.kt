@@ -1,7 +1,6 @@
 package edu.upi.cs.drake.anithings.common.model
 
-import edu.upi.cs.drake.anithings.repository.model.AnimeData
-import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
+import edu.upi.cs.drake.anithings.data.local.NewAnimeData
 
 /**
  * Created by drake on 3/27/2018.

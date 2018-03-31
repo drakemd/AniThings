@@ -4,9 +4,8 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import edu.upi.cs.drake.anithings.data.api.IAnimeApi
 import edu.upi.cs.drake.anithings.common.domain.IPopularAnimeUseCase
-import edu.upi.cs.drake.anithings.repository.model.AnimeData
 import edu.upi.cs.drake.anithings.common.model.AnimeListState
-import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
+import edu.upi.cs.drake.anithings.data.local.NewAnimeData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

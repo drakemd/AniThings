@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import edu.upi.cs.drake.anithings.R
 import edu.upi.cs.drake.anithings.common.extensions.inflate
 import edu.upi.cs.drake.anithings.common.extensions.loadImg
-import edu.upi.cs.drake.anithings.repository.model.AnimeData
-import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
+import edu.upi.cs.drake.anithings.data.local.NewAnimeData
 import kotlinx.android.synthetic.main.anime_item_grid.view.*
 
 /**

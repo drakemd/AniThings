@@ -1,7 +1,6 @@
 package edu.upi.cs.drake.anithings.common.domain
 
-import edu.upi.cs.drake.anithings.repository.model.AnimeData
-import edu.upi.cs.drake.anithings.repository.model.NewAnimeData
+import edu.upi.cs.drake.anithings.data.local.NewAnimeData
 import io.reactivex.Single
 
 /**

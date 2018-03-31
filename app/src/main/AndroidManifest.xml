@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.AnimeListActivity">
+        <activity android:name=".view.animelist.AnimeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".detail.AnimeDetail"
+            android:name=".view.detail.AnimeDetail"
             android:label="@string/title_activity_anime_detail"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
