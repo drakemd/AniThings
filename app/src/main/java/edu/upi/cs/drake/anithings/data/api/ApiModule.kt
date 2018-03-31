@@ -2,7 +2,8 @@ package edu.upi.cs.drake.anithings.data.api
 
 import dagger.Module
 import dagger.Provides
-import edu.upi.cs.drake.anithings.data.IAnimeDbService
+import edu.upi.cs.drake.anithings.data.AnimeRepository
+import edu.upi.cs.drake.anithings.data.DbRepository
 import javax.inject.Singleton
 
 /**
@@ -15,5 +16,5 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideAnimeRepository(animeApi: IAnimeApi): IAnimeDbService = AnimeDbService(animeApi)
+    fun provideAnimeRepository(animeApi: IAnimeApi): DbRepository = AnimeRepository(animeApi)
 }

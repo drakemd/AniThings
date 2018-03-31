@@ -1,6 +1,6 @@
 package edu.upi.cs.drake.anithings.common.domain
 
-import edu.upi.cs.drake.anithings.data.IAnimeDbService
+import edu.upi.cs.drake.anithings.data.DbRepository
 import edu.upi.cs.drake.anithings.data.api.model.AnimeDataResponse
 import edu.upi.cs.drake.anithings.data.local.NewAnimeData
 import io.reactivex.Single
@@ -11,7 +11,7 @@ import javax.inject.Inject
  * use case implementation for popular anime
  */
 
-class PopularAnimeUseCase @Inject constructor(private val IAnimeDbService: IAnimeDbService) : IPopularAnimeUseCase {
+class PopularAnimeUseCase @Inject constructor(private val DbRepository: DbRepository) : IPopularAnimeUseCase {
 
     /*
     * get popular anime from animeDbService and map it to List<AnimeData>
@@ -20,7 +20,7 @@ class PopularAnimeUseCase @Inject constructor(private val IAnimeDbService: IAnim
     private val limit = 15
 
     override fun getPopularAnimeByPage(page: Int): Single<List<NewAnimeData>> {
-        return IAnimeDbService.getPopularAnime("popularityRank", limit, page*limit)
+        return DbRepository.getPopularAnime("popularityRank", limit, page*limit)
                 .map { it.data.map { mapRawToEntity(it) } }
     }
 
