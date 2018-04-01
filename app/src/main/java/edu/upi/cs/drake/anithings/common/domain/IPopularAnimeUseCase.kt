@@ -1,6 +1,6 @@
 package edu.upi.cs.drake.anithings.common.domain
 
-import edu.upi.cs.drake.anithings.data.local.NewAnimeData
+import edu.upi.cs.drake.anithings.data.local.AnimeData
 import io.reactivex.Single
 
 /**
@@ -8,5 +8,5 @@ import io.reactivex.Single
  * interface use case for popular anime
  */
 interface IPopularAnimeUseCase {
-    fun getPopularAnimeByPage(page: Int): Single<List<NewAnimeData>>
+    fun getPopularAnimeByPage(page: Int): Single<List<AnimeData>>
 }

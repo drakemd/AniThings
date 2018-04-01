@@ -15,8 +15,8 @@ import edu.upi.cs.drake.anithings.common.domain.IPopularAnimeUseCase
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory @Inject constructor(private val popularAnimeUseCase: IPopularAnimeUseCase): ViewModelProvider.Factory{
     override fun <T: ViewModel> create(modelClass: Class<T>): T{
-        if (modelClass.isAssignableFrom(PopularAnimeViewModel::class.java)) {
-            return PopularAnimeViewModel(popularAnimeUseCase) as T
+        if (modelClass.isAssignableFrom(AnimeViewModel::class.java)) {
+            return AnimeViewModel(popularAnimeUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

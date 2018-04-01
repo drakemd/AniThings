@@ -1,18 +1,16 @@
 package edu.upi.cs.drake.anithings.common.model
 
-import edu.upi.cs.drake.anithings.data.local.NewAnimeData
-
 /**
  * Created by drake on 3/27/2018.
  * model class to observe anime data state
  */
-sealed class AnimeListState {
+sealed class AnimeListState<T> {
     abstract val pageNum: Int
     abstract val loadedAllItems: Boolean
-    abstract val allData: List<NewAnimeData>
-    abstract val newData: List<NewAnimeData>
+    abstract val allData: T
+    abstract val newData: T
 
-    data class DefaultState(override val pageNum: Int, override val loadedAllItems: Boolean, override val allData: List<NewAnimeData>, override val newData: List<NewAnimeData>) : AnimeListState()
-    data class LoadingState(override val pageNum: Int, override val loadedAllItems: Boolean, override val allData: List<NewAnimeData>, override val newData: List<NewAnimeData>) : AnimeListState()
-    data class ErrorState(val errorMessage: String, override val pageNum: Int, override val loadedAllItems: Boolean, override val allData: List<NewAnimeData>, override val newData: List<NewAnimeData>) : AnimeListState()
+    data class SuccessState<T>(override val pageNum: Int, override val loadedAllItems: Boolean, override val allData: T, override val newData: T) : AnimeListState<T>()
+    data class LoadingState<T>(override val pageNum: Int, override val loadedAllItems: Boolean, override val allData: T, override val newData: T) : AnimeListState<T>()
+    data class ErrorState<T>(val errorMessage: String, override val pageNum: Int, override val loadedAllItems: Boolean, override val allData: T, override val newData: T) : AnimeListState<T>()
 }

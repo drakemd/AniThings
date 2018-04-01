@@ -16,5 +16,5 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideAnimeRepository(animeApi: IAnimeApi): DbRepository = AnimeRepository(animeApi)
+    fun provideAnimeRepository(animeApi: AnimeApiService): DbRepository = AnimeRepository(animeApi)
 }

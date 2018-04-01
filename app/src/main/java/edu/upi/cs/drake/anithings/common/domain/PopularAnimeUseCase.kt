@@ -2,7 +2,7 @@ package edu.upi.cs.drake.anithings.common.domain
 
 import edu.upi.cs.drake.anithings.data.DbRepository
 import edu.upi.cs.drake.anithings.data.api.model.AnimeDataResponse
-import edu.upi.cs.drake.anithings.data.local.NewAnimeData
+import edu.upi.cs.drake.anithings.data.local.AnimeData
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -19,13 +19,13 @@ class PopularAnimeUseCase @Inject constructor(private val DbRepository: DbReposi
 
     private val limit = 15
 
-    override fun getPopularAnimeByPage(page: Int): Single<List<NewAnimeData>> {
+    override fun getPopularAnimeByPage(page: Int): Single<List<AnimeData>> {
         return DbRepository.getPopularAnime("popularityRank", limit, page*limit)
                 .map { it.data.map { mapRawToEntity(it) } }
     }
 
-    fun mapRawToEntity(it: AnimeDataResponse): NewAnimeData{
-        return NewAnimeData(
+    fun mapRawToEntity(it: AnimeDataResponse): AnimeData{
+        return AnimeData(
                 it.id,
                 it.attributes.canonicalTitle,
                 it.attributes.synopsis,

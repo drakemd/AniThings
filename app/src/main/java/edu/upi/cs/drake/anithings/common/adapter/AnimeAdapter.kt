@@ -3,7 +3,7 @@ package edu.upi.cs.drake.anithings.common.adapter
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import edu.upi.cs.drake.anithings.data.local.NewAnimeData
+import edu.upi.cs.drake.anithings.data.local.AnimeData
 
 /**
  * Created by drake on 3/28/2018.
@@ -38,7 +38,7 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
 
     override fun getItemViewType(position: Int) = items[position].getViewType()
 
-    fun addAnime(anime: List<NewAnimeData>){
+    fun addAnime(anime: List<AnimeData>){
         //first remove loading and notify
         val initPosition = items.size - 1
         items.removeAt(initPosition)
@@ -50,7 +50,7 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
         notifyItemRangeChanged(initPosition, items.size)
     }
 
-    fun clearAndAddAnime(anime: List<NewAnimeData>){
+    fun clearAndAddAnime(anime: List<AnimeData>){
         //first clear all and notify
         items.clear()
         notifyItemRangeRemoved(0, getLastPosition())
@@ -61,9 +61,9 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
         notifyItemRangeChanged(0, items.size)
     }
 
-    fun getAnime(): List<NewAnimeData> = items
+    fun getAnime(): List<AnimeData> = items
             .filter { it.getViewType() == AdapterConstants.ANIME }
-            .map { it as NewAnimeData }
+            .map { it as AnimeData }
 
     private fun getLastPosition() = if(items.lastIndex == -1) 0 else items.lastIndex
 }
