@@ -1,31 +1,22 @@
-package edu.upi.cs.drake.anithings.common.domain
+package edu.upi.cs.drake.anithings.data.api
 
-import edu.upi.cs.drake.anithings.data.Repository
+import android.util.Log
 import edu.upi.cs.drake.anithings.data.api.model.AnimeDataResponse
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeData
 import io.reactivex.Single
 import javax.inject.Inject
 
-/**
- * Created by drake on 3/27/2018.
- * use case implementation for popular anime
- */
+class RemoteAnimeDataSource @Inject constructor(private val remoteAnimeService: RemoteAnimeService) {
 
-class PopularAnimeUseCase @Inject constructor(private val Repository: Repository){
+    private val limit = 15
 
-    /*
-    * get popular anime from animeDbService and map it to List<AnimeData>
-    */
-
-    /*private val limit = 15
-
-    override fun getPopularAnimeByPage(page: Int): Single<List<AnimeData>> {
-        return Repository.getPopularAnime("popularityRank", limit, page*limit)
+    fun getPopularAnimeByPage(page: Int): Single<List<AnimeData>> {
+        Log.d("remotedatasource", page.toString())
+        return remoteAnimeService.getPopularAnime("-startDate", limit, page * limit, "current")
                 .map { it.data.map { mapRawToEntity(it) } }
     }
 
-    fun mapRawToEntity(it: AnimeDataResponse): AnimeData {
-        return AnimeData(
+    private fun mapRawToEntity(it: AnimeDataResponse): AnimeData = AnimeData(
                 it.id,
                 it.attributes.canonicalTitle,
                 it.attributes.synopsis,
@@ -43,5 +34,4 @@ class PopularAnimeUseCase @Inject constructor(private val Repository: Repository
                 it.attributes.youtubeVideoId,
                 it.attributes.showType
         )
-    }*/
 }

@@ -1,10 +1,13 @@
 package edu.upi.cs.drake.anithings.di.module
 
+import android.arch.persistence.room.Room
 import android.content.Context
 import dagger.Module
 import dagger.Provides
 import edu.upi.cs.drake.anithings.AniThingsApp
 import edu.upi.cs.drake.anithings.common.domain.IPopularAnimeUseCase
+import edu.upi.cs.drake.anithings.data.AnimeRepository
+import edu.upi.cs.drake.anithings.data.local.LocalAnimeDatasource
 import edu.upi.cs.drake.anithings.viewmodel.ViewModelFactory
 import javax.inject.Singleton
 
@@ -22,7 +25,13 @@ class AppModule {
     }
 
     @Provides
-    fun provideViewModelFactiory(popularAnimeUseCase: IPopularAnimeUseCase): ViewModelFactory {
-        return ViewModelFactory(popularAnimeUseCase)
+    fun provideViewModelFactiory(animeRepository: AnimeRepository): ViewModelFactory {
+        return ViewModelFactory(animeRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDb(app: AniThingsApp): LocalAnimeDatasource {
+        return Room.databaseBuilder(app, LocalAnimeDatasource::class.java, "anime-db").build()
     }
 }

@@ -22,8 +22,7 @@ import javax.inject.Singleton
     AppModule::class,
     ComponentModule::class,
     NetworkModule::class,
-    ApiModule::class,
-    UseCaseModule::class
+    ApiModule::class
 ])
 interface AppComponent {
     @Component.Builder

@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider
 import javax.inject.Inject
 
 import edu.upi.cs.drake.anithings.common.domain.IPopularAnimeUseCase
+import edu.upi.cs.drake.anithings.data.AnimeRepository
 
 
 /**
@@ -13,10 +14,10 @@ import edu.upi.cs.drake.anithings.common.domain.IPopularAnimeUseCase
  */
 
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory @Inject constructor(private val popularAnimeUseCase: IPopularAnimeUseCase): ViewModelProvider.Factory{
+class ViewModelFactory @Inject constructor(private val animeRepository: AnimeRepository): ViewModelProvider.Factory{
     override fun <T: ViewModel> create(modelClass: Class<T>): T{
         if (modelClass.isAssignableFrom(AnimeViewModel::class.java)) {
-            return AnimeViewModel(popularAnimeUseCase) as T
+            return AnimeViewModel(animeRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

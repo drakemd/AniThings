@@ -1,9 +1,12 @@
 package edu.upi.cs.drake.anithings.common.adapter
 
 import android.support.v4.util.SparseArrayCompat
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.ViewGroup
-import edu.upi.cs.drake.anithings.data.local.AnimeData
+import edu.upi.cs.drake.anithings.data.local.entities.AnimeData
+import edu.upi.cs.drake.anithings.data.local.entities.AnimeDataDiffCallback
 
 /**
  * Created by drake on 3/28/2018.
@@ -11,7 +14,7 @@ import edu.upi.cs.drake.anithings.data.local.AnimeData
  */
 class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items: ArrayList<ViewType>
+    private var items: ArrayList<ViewType> //ArrayListOf<ViewType>
     private var delegateAdapter = SparseArrayCompat<ViewTypeDelegateAdapter>()
 
 
@@ -22,7 +25,7 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
     init {
         delegateAdapter.put(AdapterConstants.LOADING, LoadingDelegateAdapter())
         delegateAdapter.put(AdapterConstants.ANIME, AnimeDelegateAdapter(listener))
-        items = ArrayList()
+        items = arrayListOf()
         items.add(loadingItem)
     }
 
@@ -41,6 +44,25 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
     fun addAnime(anime: List<AnimeData>){
         //first remove loading and notify
         val initPosition = items.size - 1
+
+        val diffCallback = AnimeDataDiffCallback(this.items, anime)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        Log.d("init", initPosition.toString())
+        items.removeAt(initPosition)
+        notifyItemRemoved(initPosition)
+
+        //insert anime and loading at the end of the list
+        items.clear()
+        items.addAll(anime)
+        diffResult.dispatchUpdatesTo(this)
+        items.add(loadingItem)
+        notifyItemRangeChanged(initPosition, items.size)
+    }
+
+    /*fun addAnime(anime: List<AnimeData>){
+        //first remove loading and notify
+        val initPosition = items.size - 1
+
         items.removeAt(initPosition)
         notifyItemRemoved(initPosition)
 
@@ -48,7 +70,7 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
         items.addAll(anime)
         items.add(loadingItem)
         notifyItemRangeChanged(initPosition, items.size)
-    }
+    }*/
 
     fun clearAndAddAnime(anime: List<AnimeData>){
         //first clear all and notify
@@ -57,7 +79,7 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
 
         //insert anime
         items.addAll(anime)
-        items.add(loadingItem)
+        //items.add(loadingItem)
         notifyItemRangeChanged(0, items.size)
     }
 
