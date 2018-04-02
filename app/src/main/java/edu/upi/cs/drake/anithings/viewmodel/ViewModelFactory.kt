@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import javax.inject.Inject
 
-import edu.upi.cs.drake.anithings.common.domain.IPopularAnimeUseCase
 import edu.upi.cs.drake.anithings.data.AnimeRepository
 
 

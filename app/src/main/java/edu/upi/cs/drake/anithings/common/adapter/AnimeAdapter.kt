@@ -59,19 +59,6 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
         notifyItemRangeChanged(initPosition, items.size)
     }
 
-    /*fun addAnime(anime: List<AnimeData>){
-        //first remove loading and notify
-        val initPosition = items.size - 1
-
-        items.removeAt(initPosition)
-        notifyItemRemoved(initPosition)
-
-        //insert anime and loading at the end of the list
-        items.addAll(anime)
-        items.add(loadingItem)
-        notifyItemRangeChanged(initPosition, items.size)
-    }*/
-
     fun clearAndAddAnime(anime: List<AnimeData>){
         //first clear all and notify
         items.clear()

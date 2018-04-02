@@ -5,7 +5,6 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import edu.upi.cs.drake.anithings.AniThingsApp
-import edu.upi.cs.drake.anithings.common.domain.IPopularAnimeUseCase
 import edu.upi.cs.drake.anithings.data.AnimeRepository
 import edu.upi.cs.drake.anithings.data.local.LocalAnimeDatasource
 import edu.upi.cs.drake.anithings.viewmodel.ViewModelFactory
@@ -27,11 +26,5 @@ class AppModule {
     @Provides
     fun provideViewModelFactiory(animeRepository: AnimeRepository): ViewModelFactory {
         return ViewModelFactory(animeRepository)
-    }
-
-    @Singleton
-    @Provides
-    fun provideDb(app: AniThingsApp): LocalAnimeDatasource {
-        return Room.databaseBuilder(app, LocalAnimeDatasource::class.java, "anime-db").build()
     }
 }

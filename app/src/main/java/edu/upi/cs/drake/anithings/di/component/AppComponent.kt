@@ -4,11 +4,10 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import edu.upi.cs.drake.anithings.AniThingsApp
-import edu.upi.cs.drake.anithings.common.domain.UseCaseModule
 import edu.upi.cs.drake.anithings.di.module.AppModule
 import edu.upi.cs.drake.anithings.di.module.ComponentModule
 import edu.upi.cs.drake.anithings.di.module.NetworkModule
-import edu.upi.cs.drake.anithings.data.api.ApiModule
+import edu.upi.cs.drake.anithings.di.module.RepositoryModule
 import javax.inject.Singleton
 
 /**
@@ -22,7 +21,7 @@ import javax.inject.Singleton
     AppModule::class,
     ComponentModule::class,
     NetworkModule::class,
-    ApiModule::class
+    RepositoryModule::class
 ])
 interface AppComponent {
     @Component.Builder

@@ -18,12 +18,6 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKitsuAnimeService(retrofit: Retrofit): RemoteAnimeService {
-        return retrofit.create(RemoteAnimeService::class.java)
-    }
-
-    @Provides
-    @Singleton
     fun provideRetrofit(): Retrofit{
         return Retrofit.Builder()
                 .baseUrl("https://kitsu.io/api/edge/")

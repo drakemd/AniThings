@@ -3,16 +3,16 @@ package edu.upi.cs.drake.anithings.data.api
 import android.util.Log
 import edu.upi.cs.drake.anithings.data.api.model.AnimeDataResponse
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeData
-import io.reactivex.Single
+import io.reactivex.Flowable
 import javax.inject.Inject
 
 class RemoteAnimeDataSource @Inject constructor(private val remoteAnimeService: RemoteAnimeService) {
 
     private val limit = 15
 
-    fun getPopularAnimeByPage(page: Int): Single<List<AnimeData>> {
+    fun getPopularAnimeByPage(page: Int): Flowable<List<AnimeData>> {
         Log.d("remotedatasource", page.toString())
-        return remoteAnimeService.getPopularAnime("-startDate", limit, page * limit, "current")
+        return remoteAnimeService.getPopularAnime("popularityRank", limit, page * limit, "current")
                 .map { it.data.map { mapRawToEntity(it) } }
     }
 

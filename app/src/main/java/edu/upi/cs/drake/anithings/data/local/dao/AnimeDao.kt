@@ -6,13 +6,14 @@ import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeData
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeGenres
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao
 interface AnimeDao {
 
-    @Query("SELECT * FROM anime ORDER BY startDate DESC")
-    fun getCurrentAnime(): Single<List<AnimeData>>
+    @Query("SELECT * FROM anime ORDER BY timestamp")
+    fun getCurrentAnime(): Flowable<List<AnimeData>>
 
     @Query("SELECT * FROM animegenres WHERE animeId = :entityId")
     fun getAnimeGenres(entityId: Int): Single<List<AnimeGenres>>

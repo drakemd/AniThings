@@ -8,6 +8,5 @@ import edu.upi.cs.drake.anithings.data.local.entities.AnimeGenres
 
 @Database(entities = [AnimeData::class, AnimeGenres::class], version = 3)
 abstract class LocalAnimeDatasource: RoomDatabase() {
-
     abstract fun animeDao(): AnimeDao
 }
