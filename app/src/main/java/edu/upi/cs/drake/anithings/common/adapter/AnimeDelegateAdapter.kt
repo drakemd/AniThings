@@ -1,30 +1,23 @@
 package edu.upi.cs.drake.anithings.common.adapter
 
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import edu.upi.cs.drake.anithings.R
-import edu.upi.cs.drake.anithings.common.extensions.inflate
-import edu.upi.cs.drake.anithings.common.extensions.loadImg
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
-import kotlinx.android.synthetic.main.anime_item_grid.view.*
+import edu.upi.cs.drake.anithings.databinding.AnimeItemBinding
+import edu.upi.cs.drake.anithings.view.animelist.AnimeListCallback
+import kotlinx.android.synthetic.main.anime_item.view.*
 
 /**
  * Created by drake on 3/28/2018.
  *
  */
-class AnimeDelegateAdapter(listener: RecyclerViewOnClickListener): ViewTypeDelegateAdapter {
+class AnimeDelegateAdapter(listener: AnimeListCallback): ViewTypeDelegateAdapter {
 
     private var mListener = listener
 
     override fun onCreateViewHolder(parent: ViewGroup): AnimeViewHolder{
-        val view = parent.inflate(R.layout.anime_item_grid)
-        val cardView = view.findViewById(R.id.card_view) as CardView
-        cardView.maxCardElevation = 2.0F
-        cardView.radius = 5.0F
-        return AnimeViewHolder(view, mListener)
+        return AnimeViewHolder.create(LayoutInflater.from(parent.context), parent, mListener)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: ViewType) {
@@ -32,25 +25,25 @@ class AnimeDelegateAdapter(listener: RecyclerViewOnClickListener): ViewTypeDeleg
         holder.bind(item as AnimeEntity)
     }
 
-    class AnimeViewHolder(view: View, listener: RecyclerViewOnClickListener): RecyclerView.ViewHolder(view), View.OnClickListener {
-
-        private var mListener = listener
-        private val imgThumbnail = view.thumbnail
-        private val title = view.title
-
+    class AnimeViewHolder(var binding: AnimeItemBinding, var listener: AnimeListCallback): RecyclerView.ViewHolder(binding.root){
         init {
-            mListener = listener
-            view.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View) {
-            mListener.onClick(v, adapterPosition)
+            binding.root.setOnClickListener({listener.onAnimeClick(binding.anime, binding.thumbnail)})
         }
 
         fun bind(item: AnimeEntity) {
-            imgThumbnail.loadImg(item.posterImage)
-            title.text = item.canonicalTitle
-            ViewCompat.setTransitionName(imgThumbnail, item.canonicalTitle)
+            binding.anime = item
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun create(inflater: LayoutInflater, parent: ViewGroup, listener: AnimeListCallback): AnimeViewHolder{
+                val animeItemBinding: AnimeItemBinding = AnimeItemBinding.inflate(inflater, parent, false)
+                animeItemBinding.root.card_view.apply {
+                    maxCardElevation = 2.0F
+                    radius = 5.0F
+                }
+                return AnimeViewHolder(animeItemBinding, listener)
+            }
         }
     }
 }

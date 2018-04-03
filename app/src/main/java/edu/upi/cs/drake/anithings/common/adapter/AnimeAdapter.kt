@@ -7,16 +7,16 @@ import android.util.Log
 import android.view.ViewGroup
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeDataDiffCallback
+import edu.upi.cs.drake.anithings.view.animelist.AnimeListCallback
 
 /**
  * Created by drake on 3/28/2018.
  * anime adapter (RecyclerView.Adapter) created from delegates adapter
  */
-class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AnimeAdapter(listener: AnimeListCallback): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: ArrayList<ViewType> //ArrayListOf<ViewType>
     private var delegateAdapter = SparseArrayCompat<ViewTypeDelegateAdapter>()
-
 
     private val loadingItem = object: ViewType{
         override fun getViewType() = AdapterConstants.LOADING
@@ -57,17 +57,6 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
         diffResult.dispatchUpdatesTo(this)
         items.add(loadingItem)
         notifyItemRangeChanged(initPosition, items.size)
-    }
-
-    fun clearAndAddAnime(anime: List<AnimeEntity>){
-        //first clear all and notify
-        items.clear()
-        notifyItemRangeRemoved(0, getLastPosition())
-
-        //insert anime
-        items.addAll(anime)
-        //items.add(loadingItem)
-        notifyItemRangeChanged(0, items.size)
     }
 
     fun getAnime(): List<AnimeEntity> = items

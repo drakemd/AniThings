@@ -26,6 +26,7 @@
                 android:layout_marginStart="@dimen/desc_margin"
                 android:layout_marginTop="@dimen/desc_margin"
                 android:contentDescription="@string/poster_image"
+                android:transitionName="@string/transition_thumbnail"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:url="@{anime.posterImage}"/>
