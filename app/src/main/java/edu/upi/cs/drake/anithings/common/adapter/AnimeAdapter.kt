@@ -5,7 +5,7 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.ViewGroup
-import edu.upi.cs.drake.anithings.data.local.entities.AnimeData
+import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeDataDiffCallback
 
 /**
@@ -41,7 +41,7 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
 
     override fun getItemViewType(position: Int) = items[position].getViewType()
 
-    fun addAnime(anime: List<AnimeData>){
+    fun addAnime(anime: List<AnimeEntity>){
         //first remove loading and notify
         val initPosition = items.size - 1
 
@@ -59,7 +59,7 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
         notifyItemRangeChanged(initPosition, items.size)
     }
 
-    fun clearAndAddAnime(anime: List<AnimeData>){
+    fun clearAndAddAnime(anime: List<AnimeEntity>){
         //first clear all and notify
         items.clear()
         notifyItemRangeRemoved(0, getLastPosition())
@@ -70,9 +70,9 @@ class AnimeAdapter(listener: RecyclerViewOnClickListener): RecyclerView.Adapter<
         notifyItemRangeChanged(0, items.size)
     }
 
-    fun getAnime(): List<AnimeData> = items
+    fun getAnime(): List<AnimeEntity> = items
             .filter { it.getViewType() == AdapterConstants.ANIME }
-            .map { it as AnimeData }
+            .map { it as AnimeEntity }
 
     private fun getLastPosition() = if(items.lastIndex == -1) 0 else items.lastIndex
 }

@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:fitsSystemWindows="true">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="anime" type="edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity"/>
+    </data>
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00FFFFFF"
+        android:fitsSystemWindows="true"
+        android:transitionGroup="false">
 
-    <include layout="@layout/appbar"/>
-    <include layout="@layout/content_detail"/>
+        <include
+            android:id="@+id/layout1"
+            layout="@layout/appbar"
+            bind:anime="@{anime}"/>
+        <include
+            android:id="@+id/layout2"
+            layout="@layout/content_detail"
+            bind:anime="@{anime}"/>
 
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

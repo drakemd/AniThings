@@ -9,7 +9,7 @@ class AnimeDataDiffCallback(val oldAnimeList: List<ViewType>, val newAnimeList: 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         if(oldAnimeList[oldItemPosition].getViewType() == newAnimeList[newItemPosition].getViewType()){
             if(oldAnimeList[oldItemPosition].getViewType() == AdapterConstants.ANIME){
-                if((oldAnimeList[oldItemPosition] as AnimeData).id == (newAnimeList[newItemPosition] as AnimeData).id){
+                if((oldAnimeList[oldItemPosition] as AnimeEntity).id == (newAnimeList[newItemPosition] as AnimeEntity).id){
                     return true
                 }
             }
@@ -27,7 +27,7 @@ class AnimeDataDiffCallback(val oldAnimeList: List<ViewType>, val newAnimeList: 
 
         if(oldItem.getViewType() == newItem.getViewType()){
             if(oldItem.getViewType() == AdapterConstants.ANIME){
-                if((oldItem as AnimeData).canonicalTitle.equals((newItem as AnimeData).canonicalTitle)){
+                if((oldItem as AnimeEntity).canonicalTitle.equals((newItem as AnimeEntity).canonicalTitle)){
                     return true
                 }
             }

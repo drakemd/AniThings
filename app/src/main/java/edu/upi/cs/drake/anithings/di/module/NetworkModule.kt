@@ -2,7 +2,6 @@ package edu.upi.cs.drake.anithings.di.module
 
 import dagger.Module
 import dagger.Provides
-import edu.upi.cs.drake.anithings.data.api.RemoteAnimeService
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import edu.upi.cs.drake.anithings.R
 import edu.upi.cs.drake.anithings.common.extensions.inflate
 import edu.upi.cs.drake.anithings.common.extensions.loadImg
-import edu.upi.cs.drake.anithings.data.local.entities.AnimeData
+import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
 import kotlinx.android.synthetic.main.anime_item_grid.view.*
 
 /**
@@ -29,7 +29,7 @@ class AnimeDelegateAdapter(listener: RecyclerViewOnClickListener): ViewTypeDeleg
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: ViewType) {
         holder as AnimeViewHolder
-        holder.bind(item as AnimeData)
+        holder.bind(item as AnimeEntity)
     }
 
     class AnimeViewHolder(view: View, listener: RecyclerViewOnClickListener): RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -47,7 +47,7 @@ class AnimeDelegateAdapter(listener: RecyclerViewOnClickListener): ViewTypeDeleg
             mListener.onClick(v, adapterPosition)
         }
 
-        fun bind(item: AnimeData) {
+        fun bind(item: AnimeEntity) {
             imgThumbnail.loadImg(item.posterImage)
             title.text = item.canonicalTitle
             ViewCompat.setTransitionName(imgThumbnail, item.canonicalTitle)

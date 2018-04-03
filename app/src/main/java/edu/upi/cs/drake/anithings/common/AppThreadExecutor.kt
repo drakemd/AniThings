@@ -14,7 +14,7 @@ import java.util.concurrent.Executors
  */
 val IO_EXECUTOR = Executors.newSingleThreadExecutor()
 val NETWORK_EXECUTOR = Executors.newFixedThreadPool(3)
-private val MAIN_EXECUTOR = MainThreadExecutor()
+val MAIN_EXECUTOR = MainThreadExecutor()
 
 /**
  * Utility method to run blocks on a dedicated background thread, used for io/database work.
@@ -31,7 +31,7 @@ fun mainThread(f: () -> Unit){
     MAIN_EXECUTOR.execute(f)
 }
 
-private class MainThreadExecutor : Executor {
+class MainThreadExecutor : Executor {
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     override fun execute(command: Runnable) {
         mainThreadHandler.post(command)

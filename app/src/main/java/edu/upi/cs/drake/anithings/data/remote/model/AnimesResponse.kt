@@ -1,4 +1,4 @@
-package edu.upi.cs.drake.anithings.data.api.model
+package edu.upi.cs.drake.anithings.data.remote.model
 
 import com.squareup.moshi.Json
 
@@ -7,8 +7,7 @@ import com.squareup.moshi.Json
  *
  */
 
-class KitsuAnimeResponse(@Json(name = "data") val data: List<AnimeDataResponse>,
-                         @Json(name = "included") val included: List<IncludedGenreResponse>)
+class KitsuAnimeResponse(@Json(name = "data") val data: List<AnimeDataResponse>)
 
 class AnimeDataResponse(@Json(name = "id") val id: Int,
                         @Json(name = "type") val type: String,
@@ -61,7 +60,3 @@ class AnimeRelationshipsResponse(@Json(name = "genres") val genres: ListGenresRe
 class ListGenresResponse(@Json(name = "data") val data: List<GenresResponse>)
 
 class GenresResponse(@Json(name = "id") val id: Int)
-
-class IncludedGenreResponse(@Json(name = "id") val id: Int, @Json(name = "attributes") val genreAttResponse: GenreAttResponse)
-
-class GenreAttResponse(@Json(name = "name") val name: String)

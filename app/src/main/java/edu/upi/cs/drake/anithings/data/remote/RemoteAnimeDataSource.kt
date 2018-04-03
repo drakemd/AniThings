@@ -1,22 +1,27 @@
-package edu.upi.cs.drake.anithings.data.api
+package edu.upi.cs.drake.anithings.data.remote
 
 import android.util.Log
-import edu.upi.cs.drake.anithings.data.api.model.AnimeDataResponse
-import edu.upi.cs.drake.anithings.data.local.entities.AnimeData
+import edu.upi.cs.drake.anithings.data.remote.model.AnimeDataResponse
+import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
+import edu.upi.cs.drake.anithings.data.local.entities.GenresEntity
 import io.reactivex.Flowable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class RemoteAnimeDataSource @Inject constructor(private val remoteAnimeService: RemoteAnimeService) {
 
-    private val limit = 15
-
-    fun getPopularAnimeByPage(page: Int): Flowable<List<AnimeData>> {
+    fun getPopularAnimeByPage(page: Int, limit: Int): Flowable<List<AnimeEntity>> {
         Log.d("remotedatasource", page.toString())
         return remoteAnimeService.getPopularAnime("popularityRank", limit, page * limit, "current")
-                .map { it.data.map { mapRawToEntity(it) } }
+                .map { it.data.map { mapAnimeRawToEntity(it) } }
     }
 
-    private fun mapRawToEntity(it: AnimeDataResponse): AnimeData = AnimeData(
+    fun getAllGenres(): Single<List<GenresEntity>>{
+        return remoteAnimeService.getAllGenres(100)
+                .map {it.data.map{GenresEntity(it.id, it.attributes.name)}}
+    }
+
+    private fun mapAnimeRawToEntity(it: AnimeDataResponse): AnimeEntity = AnimeEntity(
                 it.id,
                 it.attributes.canonicalTitle,
                 it.attributes.synopsis,

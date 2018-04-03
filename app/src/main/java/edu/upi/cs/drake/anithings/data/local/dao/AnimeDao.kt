@@ -4,8 +4,8 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import edu.upi.cs.drake.anithings.data.local.entities.AnimeData
-import edu.upi.cs.drake.anithings.data.local.entities.AnimeGenres
+import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
+import edu.upi.cs.drake.anithings.data.local.entities.GenresEntity
 import io.reactivex.Flowable
 import io.reactivex.Single
 
@@ -13,14 +13,11 @@ import io.reactivex.Single
 interface AnimeDao {
 
     @Query("SELECT * FROM anime ORDER BY timestamp")
-    fun getCurrentAnime(): Flowable<List<AnimeData>>
+    fun getCurrentAnime(): Flowable<List<AnimeEntity>>
 
-    @Query("SELECT * FROM animegenres WHERE animeId = :entityId")
-    fun getAnimeGenres(entityId: Int): Single<List<AnimeGenres>>
+    @Query("SELECT * FROM anime WHERE id = :id LIMIT 1")
+    fun getAnimeById(id:Int): Single<AnimeEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllAnime(animeList: List<AnimeData>)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun inserAnimeGenres(animeGenres: List<AnimeGenres>)
+    fun insertAllAnime(animeList: List<AnimeEntity>)
 }
