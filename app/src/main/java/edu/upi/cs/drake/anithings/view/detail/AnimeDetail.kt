@@ -10,19 +10,20 @@ import android.support.v7.app.AppCompatActivity
 import edu.upi.cs.drake.anithings.R
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
-import android.transition.TransitionInflater
 import dagger.android.AndroidInjection
 import edu.upi.cs.drake.anithings.viewmodel.AnimeDetailViewModel
 import edu.upi.cs.drake.anithings.viewmodel.ViewModelFactory
-import kotlinx.android.synthetic.main.content_detail.*
 import javax.inject.Inject
 import android.databinding.DataBindingUtil
-import android.transition.TransitionManager
+import android.transition.TransitionInflater
+import android.transition.TransitionSet
 import android.view.LayoutInflater
 import edu.upi.cs.drake.anithings.databinding.ActivityAnimeDetailBinding
 import edu.upi.cs.drake.anithings.databinding.GenresItemBinding
 
-
+/**
+ * this activity provide detail view for anime data
+ */
 class AnimeDetail : AppCompatActivity(){
 
     @Inject
@@ -30,6 +31,7 @@ class AnimeDetail : AppCompatActivity(){
     private lateinit var animeDetailViewModel: AnimeDetailViewModel
     private lateinit var binding: ActivityAnimeDetailBinding
 
+    //inflate layout, initialize view model and set/populate the layout
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -39,43 +41,31 @@ class AnimeDetail : AppCompatActivity(){
     }
 
     override fun onBackPressed() {
-        supportFinishAfterTransition()
+        finishAfterTransition()
     }
 
-
     private fun setView(){
-        supportPostponeEnterTransition()
+        setTransition()
         initCollapsingToolbar()
-        window.sharedElementEnterTransition =
-                TransitionInflater.from(this).inflateTransition(R.transition.shared_element_transition)
-        window.enterTransition =
-                TransitionInflater.from(this).inflateTransition(R.transition.appbar_transition).addTarget(binding.layout1?.appbar)
-
         populateView()
     }
 
-    private fun populateView(){
-        val id = intent?.extras?.getInt(KEY_ANIME_ID)
-        id?.let {
-            animeDetailViewModel.run {
-                setId(it)
-                update()
-                anime.observe(this@AnimeDetail, Observer {
-                    binding.anime = it
-                    supportStartPostponedEnterTransition()
-                })
-                getAnimeGenres()
-                genres.observe(this@AnimeDetail, Observer {
-                    it?.let { it1 -> inflateGenres(it1) }
-                })
-            }
-        }
+    private fun setTransition(){
+        postponeEnterTransition()
+        val transitionAppBar =
+                TransitionInflater.from(this).inflateTransition(R.transition.appbar_transition).addTarget(binding.layout1?.appbar)
+        val transitionContent =
+                TransitionInflater.from(this).inflateTransition(R.transition.content_transition).addTarget(binding.layout2?.activityBaseContent)
+
+        val set = TransitionSet()
+        set.addTransition(transitionAppBar)
+        set.addTransition(transitionContent)
+
+        window.enterTransition = set
+        window.returnTransition = set
     }
 
-    /**
-     * Initializing collapsing toolbar
-     * Will show and hide the toolbar title on scroll
-     */
+    //Initializing collapsing toolbar will show and hide the toolbar title on scroll
     private fun initCollapsingToolbar(){
         setSupportActionBar(binding.layout1?.toolbar)
         val collapsingToolbar = binding.layout1?.collapsingToolbar as CollapsingToolbarLayout
@@ -102,16 +92,40 @@ class AnimeDetail : AppCompatActivity(){
         })
     }
 
+    //bind data from the view model to the layout
+    private fun populateView(){
+        val id = intent?.extras?.getInt(KEY_ANIME_ID)
+        id?.let {
+            animeDetailViewModel.run {
+                update(it)
+                anime.observe(this@AnimeDetail, Observer {
+                    binding.anime = it
+                    startPostponedEnterTransition()
+                })
+                genres.observe(this@AnimeDetail, Observer {
+                    it?.let { it1 -> inflateGenres(it1) }
+                })
+            }
+        }
+    }
+
+    //bind and inflate anime genres to the layout
     @SuppressLint("InflateParams")
     private fun inflateGenres(genres: List<String>){
-        val container = genres_container
+        val container = binding.layout2?.genresContainer
         val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         genres.forEach {
             val binding: GenresItemBinding = DataBindingUtil.inflate(inflater, R.layout.genres_item,null, false)
             binding.genre = it
-            container.addView(binding.root)
+            container?.addView(binding.root)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        animeDetailViewModel.unsubscribe()
+    }
+
 
     companion object {
         const val KEY_ANIME_ID = "key_anime_id"

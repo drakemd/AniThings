@@ -2,11 +2,13 @@ package edu.upi.cs.drake.anithings.common
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import edu.upi.cs.drake.anithings.view.animelist.AnimeListActivity
 import android.util.Log
 
 /**
  * Created by drake on 3/28/2018.
- *
+ * this class work as a scroll listener that will fire a function if it scrolled
+ * to the end of the list, it is implemented in [AnimeListActivity]
  */
 class InfiniteScrollListener (
         val func: () -> Unit,
@@ -35,7 +37,7 @@ class InfiniteScrollListener (
             }
 
             if(!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)){
-                //end has been reached
+                //end has been reached and called the function
                 Log.i("InfiniteScrollListener", "end reached")
                 func()
                 loading = true

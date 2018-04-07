@@ -15,7 +15,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -56,7 +56,6 @@ dependencies {
     //room
     implementation "android.arch.persistence.room:runtime:1.1.0-beta1"
     implementation "android.arch.persistence.room:rxjava2:1.1.0-beta1"
-    implementation 'android.arch.paging:runtime:1.0.0-alpha7'
     kapt "android.arch.persistence.room:compiler:1.1.0-beta1"
 
     // Dagger 2
@@ -80,6 +79,5 @@ dependencies {
 
     //flow layout
     implementation 'org.apmem.tools:layouts:1.10@aar'
-
     kapt 'com.android.databinding:compiler:3.1.0-alpha05'
 }

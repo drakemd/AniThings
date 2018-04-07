@@ -9,11 +9,11 @@
     <application
         android:name=".AniThingsApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/at6"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/at6"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.Launcher">
         <activity android:name=".view.animelist.AnimeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

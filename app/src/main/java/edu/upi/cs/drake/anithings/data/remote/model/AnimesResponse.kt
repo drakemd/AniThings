@@ -4,10 +4,13 @@ import com.squareup.moshi.Json
 
 /**
  * Created by drake on 3/27/2018.
- *
+ * these classes purpose is to hold the response data from the API
  */
 
-class KitsuAnimeResponse(@Json(name = "data") val data: List<AnimeDataResponse>)
+class KitsuAnimeResponse(@Json(name = "data") val data: List<AnimeDataResponse>,
+                         @Json(name = "meta") val meta: Meta)
+
+class Meta(@Json(name = "count") val count: Int)
 
 class AnimeDataResponse(@Json(name = "id") val id: Int,
                         @Json(name = "type") val type: String,

@@ -11,7 +11,10 @@ import edu.upi.cs.drake.anithings.data.local.entities.AnimeDataTypeConverter
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeJoinGenres
 import edu.upi.cs.drake.anithings.data.local.entities.GenresEntity
 
-@Database(entities = [AnimeEntity::class, GenresEntity::class, AnimeJoinGenres::class], version = 5)
+/**
+ * this class is a generic [RoomDatabase] declaring all the dao used by database
+ */
+@Database(entities = [AnimeEntity::class, GenresEntity::class, AnimeJoinGenres::class], version = 6)
 @TypeConverters(AnimeDataTypeConverter::class)
 abstract class LocalAnimeDatasource: RoomDatabase() {
     abstract fun animeDao(): AnimeDao

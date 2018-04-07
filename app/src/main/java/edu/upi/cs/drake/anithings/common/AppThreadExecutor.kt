@@ -7,8 +7,7 @@ import java.util.concurrent.Executors
 
 /**
  * Global executor pools for the whole application.
- *
- *
+ * link : https://github.com/ahmedrizwan/AndroidKotlinComponents
  * Grouping tasks like this avoids the effects of task starvation (e.g. disk reads don't wait behind
  * webservice requests).
  */

@@ -2,38 +2,33 @@ package edu.upi.cs.drake.anithings.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import edu.upi.cs.drake.anithings.common.IO_EXECUTOR
 import edu.upi.cs.drake.anithings.data.AnimeRepository
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+/**
+ * this is the ViewModel for AnimeDetail Activity
+ * this ViewModel purpose is to get anime data and its genres from the repository to be used in Activity
+ */
 class AnimeDetailViewModel @Inject constructor(private val animeRepository: AnimeRepository): ViewModel(){
 
-    private val allDisposable: MutableList<Disposable> = arrayListOf()
+    private val allDisposable: CompositeDisposable = CompositeDisposable()
 
     private var id: Int = 0
     val anime: MutableLiveData<AnimeEntity> = MutableLiveData()
     val genres: MutableLiveData<List<String>> = MutableLiveData()
 
-    fun setId(id: Int){
+    fun update(id: Int){
         this.id = id
-    }
-
-    fun update(){
         subscribeAnime()
+        getAnimeGenres()
     }
 
-    fun onDestroy(){
-        allDisposable.forEach {
-            it.dispose()
-        }
-    }
-
-    fun subscribeAnime(){
+    private fun subscribeAnime(){
         val disposable = animeRepository.getAnimeById(id)
                 .subscribeOn(Schedulers.from(IO_EXECUTOR))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -49,5 +44,9 @@ class AnimeDetailViewModel @Inject constructor(private val animeRepository: Anim
                     genres-> this.genres.value = genres
                 })
         allDisposable.add(disposable)
+    }
+
+    fun unsubscribe(){
+        allDisposable.dispose()
     }
 }

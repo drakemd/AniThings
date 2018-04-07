@@ -1,5 +1,8 @@
 package edu.upi.cs.drake.anithings.data
 
+/**
+ * a generic sealed class to store data and its state
+ */
 sealed class Resource<T>{
     abstract val data: T?
 

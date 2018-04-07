@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transitionSet
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <transitionSet>
         <slide
             android:slideEdge="top"
-            android:duration="500">
+            android:duration="300">
         </slide>
-    </transitionSet>
-    <transitionSet>
-        <slide
-            android:slideEdge="bottom"
-            android:duration="500">
-        </slide>
-    </transitionSet>
 </transitionSet>

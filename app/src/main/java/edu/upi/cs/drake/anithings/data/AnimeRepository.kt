@@ -17,37 +17,40 @@ import javax.inject.Inject
 
 /**
  * Created by drake on 3/27/2018.
- *
+ * this class implements [Repository] and should be the only class accessible to the outside of data layer
+ * this class is a bridge between view model layer and data layer
  */
 class AnimeRepository @Inject constructor(private val remoteAnimeDataSource: RemoteAnimeDataSource,
                                           private val localAnimeDatasource: LocalAnimeDatasource): Repository {
 
-    override fun getPopularAnime(page:Int, limit: Int): Flowable<Resource<List<AnimeEntity>>> {
+    override fun getAnimeList(sortBy: String?, page: Int, limit: Int, status: String?, search: String?, maxPage: Int): Flowable<Resource<List<AnimeEntity>>> {
         return object: NetworkBoundResource<List<AnimeEntity>, List<AnimeEntity>>(){
+
             override fun saveCallResult(item: List<AnimeEntity>) {
                 saveAnimeJoinGenres(item)
             }
 
             override fun shouldFetch(data: List<AnimeEntity>?): Boolean {
-                Log.d("repository", data?.size.toString() + " < " + ((page + 1) * limit).toString())
-                return (data == null || data.isEmpty()|| data.size < ((page + 1) * limit))
+                return (data == null || data.isEmpty()|| (page + 1) <= maxPage)
             }
 
-            override fun loadFromDb(): Flowable<List<AnimeEntity>> {
+            override fun loadFromDb(): Single<List<AnimeEntity>> {
                 return localAnimeDatasource.animeDao().getCurrentAnime()
             }
 
-            override fun createCall(): Flowable<List<AnimeEntity>> {
-                return remoteAnimeDataSource.getPopularAnimeByPage(page, limit)
+            override fun createCall(): Single<List<AnimeEntity>> {
+                return remoteAnimeDataSource
+                        .getAnimeListByPage(sortBy, page, limit, status, search)
             }
         }.asFlowable()
     }
 
+    //fetch all genres from the api an insert it to room database
     override fun fetchAndAddAllGenres(){
         remoteAnimeDataSource.getAllGenres()
                 .subscribeOn(Schedulers.from(NETWORK_EXECUTOR))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({it-> saveAllGenres(it)})
+                .subscribe({it-> saveAllGenres(it)},{Log.d("repository", "add genre error")})
     }
 
     override fun getAnimeById(id: Int): Single<AnimeEntity>{
@@ -62,7 +65,14 @@ class AnimeRepository @Inject constructor(private val remoteAnimeDataSource: Rem
         return localAnimeDatasource.genresDao().getCountAllGenres()
     }
 
-    fun saveAnimeJoinGenres(animeEntities: List<AnimeEntity>){
+    override fun deleteAllAnime(): Completable{
+        return Completable.fromAction {localAnimeDatasource.animeDao().deleteAllAnime()}
+                .subscribeOn(Schedulers.from(IO_EXECUTOR))
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    //insert all anime and its genres from the api to Room database
+    private fun saveAnimeJoinGenres(animeEntities: List<AnimeEntity>){
         val genreList: MutableList<AnimeJoinGenres> = arrayListOf()
         animeEntities.forEach{
             val anime = it
@@ -74,10 +84,11 @@ class AnimeRepository @Inject constructor(private val remoteAnimeDataSource: Rem
         localAnimeDatasource.animeGenresJoin().insertAnimeJoinGenresDao(genreList)
     }
 
-    fun saveAllGenres(it: List<GenresEntity>){
+    //insert all genres obtained from API to room database
+    private fun saveAllGenres(it: List<GenresEntity>){
         Completable.fromAction {localAnimeDatasource.genresDao().inserGenres(it)}
                 .subscribeOn(Schedulers.from(IO_EXECUTOR))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({Log.d("repo","success")}, {error->Log.d("repo","error")})
+                .subscribe({Log.d("repo","success add all genre")}, {error->Log.d("repo",error.message)})
     }
 }

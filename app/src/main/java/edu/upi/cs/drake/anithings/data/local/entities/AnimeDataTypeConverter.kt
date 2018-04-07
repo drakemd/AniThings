@@ -2,6 +2,10 @@ package edu.upi.cs.drake.anithings.data.local.entities
 
 import android.arch.persistence.room.TypeConverter
 
+/**
+ * a Type Converter class to convert [AnimeEntity.genres] from [List] of Int to String and vice versa
+ * because Room cannot store a [List]
+ */
 class AnimeDataTypeConverter{
     @TypeConverter
     fun stringToListOfInt(list: String): List<Int> {
@@ -15,7 +19,7 @@ class AnimeDataTypeConverter{
 
     @TypeConverter
     fun listOfIntToString(list: List<Int>): String {
-        var result: String = ""
+        var result = ""
         var index = 0
         val size = list.size
         list.forEach({

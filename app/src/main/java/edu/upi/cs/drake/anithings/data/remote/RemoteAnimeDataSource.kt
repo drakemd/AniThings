@@ -1,18 +1,18 @@
 package edu.upi.cs.drake.anithings.data.remote
 
-import android.util.Log
 import edu.upi.cs.drake.anithings.data.remote.model.AnimeDataResponse
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
 import edu.upi.cs.drake.anithings.data.local.entities.GenresEntity
-import io.reactivex.Flowable
 import io.reactivex.Single
 import javax.inject.Inject
 
+/**
+ * this class is responsible to get and map response data from the API to a generic Entity
+ */
 class RemoteAnimeDataSource @Inject constructor(private val remoteAnimeService: RemoteAnimeService) {
 
-    fun getPopularAnimeByPage(page: Int, limit: Int): Flowable<List<AnimeEntity>> {
-        Log.d("remotedatasource", page.toString())
-        return remoteAnimeService.getPopularAnime("popularityRank", limit, page * limit, "current")
+    fun getAnimeListByPage(sortBy: String?, page: Int, limit: Int, status: String?, search: String?): Single<List<AnimeEntity>> {
+        return remoteAnimeService.getAnimeList(sortBy = sortBy,limit = limit , offset = page * limit, status = status, search = search)
                 .map { it.data.map { mapAnimeRawToEntity(it) } }
     }
 

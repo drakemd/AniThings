@@ -16,12 +16,15 @@
     <dimen name="thumbnail_height">240dp</dimen>
     <dimen name="desc_margin">10dp</dimen>
     <dimen name="desc_padding">10dp</dimen>
-    <dimen name="desc_title_size">25sp</dimen>
-    <dimen name="desc_rating_size">30sp</dimen>
+    <dimen name="desc_title_size">20sp</dimen>
+    <dimen name="desc_rating_size">25sp</dimen>
     <dimen name="desc_overview_size">15sp</dimen>
 
     <!-- appbar dimens. -->
     <dimen name="detail_backdrop_height">250dp</dimen>
     <dimen name="backdrop_title">15sp</dimen>
     <dimen name="backdrop_subtitle">18sp</dimen>
+
+    <!-- action button dimens. -->
+    <dimen name="action_button_padding">10dp</dimen>
 </resources>

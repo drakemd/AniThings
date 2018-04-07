@@ -10,7 +10,6 @@ import javax.inject.Inject
 
 /**
  * Created by drake on 3/27/2018.
- *
  */
 class AniThingsApp: Application(), HasActivityInjector {
 

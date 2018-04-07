@@ -1,7 +1,7 @@
 package edu.upi.cs.drake.anithings.data
 
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
-import edu.upi.cs.drake.anithings.data.local.entities.GenresEntity
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 
@@ -10,9 +10,10 @@ import io.reactivex.Single
  *
  */
 interface Repository {
-    fun getPopularAnime(page: Int, limit: Int): Flowable<Resource<List<AnimeEntity>>>
+    fun getAnimeList(sortBy: String?, page: Int, limit: Int, status: String?, search: String?, maxPage: Int): Flowable<Resource<List<AnimeEntity>>>
     fun getAnimeById(id: Int): Single<AnimeEntity>
     fun getGenresByAnimeId(id: Int): Single<List<String>>
     fun fetchAndAddAllGenres()
     fun getCountGenres(): Single<Int>
+    fun deleteAllAnime(): Completable
 }

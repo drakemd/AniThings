@@ -3,28 +3,39 @@ package edu.upi.cs.drake.anithings.common.adapter
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.ViewGroup
+import edu.upi.cs.drake.anithings.R
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
-import edu.upi.cs.drake.anithings.data.local.entities.AnimeDataDiffCallback
 import edu.upi.cs.drake.anithings.view.animelist.AnimeListCallback
+import edu.upi.cs.drake.anithings.common.extensions.setResource
 
 /**
  * Created by drake on 3/28/2018.
- * anime adapter (RecyclerView.Adapter) created from delegates adapter
+ * this class implements RecyclerView.Adapter and use multiple view type as its items
+ * those items has its own adapter and use different layout as well
  */
-class AnimeAdapter(listener: AnimeListCallback): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AnimeAdapter(animeListCallback: AnimeListCallback): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items: ArrayList<ViewType> //ArrayListOf<ViewType>
+    private var items: ArrayList<ViewType>
     private var delegateAdapter = SparseArrayCompat<ViewTypeDelegateAdapter>()
 
     private val loadingItem = object: ViewType{
         override fun getViewType() = AdapterConstants.LOADING
     }
 
+    private val errorItem = object: ViewType{
+        override fun getViewType() = AdapterConstants.ERROR
+    }
+
+    private val notFoundItem = object: ViewType{
+        override fun getViewType() = AdapterConstants.NOTFOUND
+    }
+
     init {
-        delegateAdapter.put(AdapterConstants.LOADING, LoadingDelegateAdapter())
-        delegateAdapter.put(AdapterConstants.ANIME, AnimeDelegateAdapter(listener))
+        delegateAdapter.put(AdapterConstants.LOADING, GenericDelegateAdapter(R.layout.loading_item))
+        delegateAdapter.put(AdapterConstants.ANIME, AnimeDelegateAdapter(animeListCallback))
+        delegateAdapter.put(AdapterConstants.ERROR, RequestErrorDelegateAdapter(animeListCallback))
+        delegateAdapter.put(AdapterConstants.NOTFOUND, GenericDelegateAdapter(R.layout.adapter_item_not_found))
         items = arrayListOf()
         items.add(loadingItem)
     }
@@ -41,27 +52,57 @@ class AnimeAdapter(listener: AnimeListCallback): RecyclerView.Adapter<RecyclerVi
 
     override fun getItemViewType(position: Int) = items[position].getViewType()
 
+    //add anime to the list
     fun addAnime(anime: List<AnimeEntity>){
-        //first remove loading and notify
-        val initPosition = items.size - 1
 
+        val initPosition = items.size - 1
+        //diffcallback used so we only added a different anime to the items/no duplicating anime
         val diffCallback = AnimeDataDiffCallback(this.items, anime)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        Log.d("init", initPosition.toString())
-        items.removeAt(initPosition)
-        notifyItemRemoved(initPosition)
+        val isAdded = (diffCallback.oldListSize < diffCallback.newListSize) //are there new anime added?
+
+        //first remove loading and notify if there is
+        if(items.size > 0){
+            items.removeAt(initPosition)
+            notifyItemRemoved(initPosition)
+        }
 
         //insert anime and loading at the end of the list
         items.clear()
         items.addAll(anime)
         diffResult.dispatchUpdatesTo(this)
-        items.add(loadingItem)
-        notifyItemRangeChanged(initPosition, items.size)
+
+        //and add loadingItem at the end of the list if there are new anime added
+        if (isAdded) {
+            items.add(loadingItem)
+            notifyItemRangeChanged(initPosition, items.size + 1)
+        } else {
+            notifyItemRangeChanged(initPosition, items.size + 1)
+        }
     }
 
-    fun getAnime(): List<AnimeEntity> = items
-            .filter { it.getViewType() == AdapterConstants.ANIME }
-            .map { it as AnimeEntity }
+    //these are the methods to display or remove item from the list
+    fun showLoading(){
+        items.add(loadingItem)
+        notifyItemChanged(items.size)
+    }
 
-    private fun getLastPosition() = if(items.lastIndex == -1) 0 else items.lastIndex
+    fun removeLastItem(){
+        items.removeAt(items.size - 1)
+        notifyItemRemoved(items.size - 1)
+    }
+
+    fun showConnectionError(){
+        if(items.size > 0){
+            removeLastItem()
+        }
+        items.add(errorItem)
+        notifyItemChanged(items.size + 1)
+    }
+
+    fun showDataNotFound(){
+        removeLastItem()
+        items.add(notFoundItem)
+        notifyItemChanged(items.size + 1)
+    }
 }
