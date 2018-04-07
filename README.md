@@ -7,6 +7,7 @@ This app use mvvm with android architecture components such as Live Data, View M
 - Browse Popular, Highest Rating or Currently Airing Anime
 - Search anime by text
 - Infinite Scroll
+- Offline Support
 
 ## Screen
 ![alt gif1](https://github.com/drakemd/AniThings/blob/master/uploads/gif1.gif)
