@@ -31,7 +31,8 @@ class AnimeRepository @Inject constructor(private val remoteAnimeDataSource: Rem
             }
 
             override fun shouldFetch(data: List<AnimeEntity>?): Boolean {
-                return (data == null || data.isEmpty()|| (page + 1) <= maxPage)
+
+                return (data == null || data.isEmpty()|| data.size < ((page + 1) * limit) && (page + 1) <= maxPage)
             }
 
             override fun loadFromDb(): Single<List<AnimeEntity>> {

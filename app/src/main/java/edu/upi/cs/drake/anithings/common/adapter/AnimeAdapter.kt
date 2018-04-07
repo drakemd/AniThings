@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import edu.upi.cs.drake.anithings.R
 import edu.upi.cs.drake.anithings.data.local.entities.AnimeEntity
 import edu.upi.cs.drake.anithings.view.animelist.AnimeListCallback
-import edu.upi.cs.drake.anithings.common.extensions.setResource
 
 /**
  * Created by drake on 3/28/2018.
@@ -77,7 +76,7 @@ class AnimeAdapter(animeListCallback: AnimeListCallback): RecyclerView.Adapter<R
             items.add(loadingItem)
             notifyItemRangeChanged(initPosition, items.size + 1)
         } else {
-            notifyItemRangeChanged(initPosition, items.size + 1)
+            notifyItemRangeChanged(initPosition, items.size)
         }
     }
 
@@ -97,12 +96,12 @@ class AnimeAdapter(animeListCallback: AnimeListCallback): RecyclerView.Adapter<R
             removeLastItem()
         }
         items.add(errorItem)
-        notifyItemChanged(items.size + 1)
+        notifyItemChanged(items.size - 1)
     }
 
     fun showDataNotFound(){
         removeLastItem()
         items.add(notFoundItem)
-        notifyItemChanged(items.size + 1)
+        notifyItemChanged(items.size - 1)
     }
 }
