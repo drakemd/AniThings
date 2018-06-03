@@ -2,6 +2,7 @@
 
 Anithings is an app to discover anime built on top of [Kitsu Anime Api](https://kitsu.docs.apiary.io/).
 This app use mvvm with android architecture components such as Live Data, View Model, Data Binding and Room Persistence.
+Checkout Flutter version [here](https://github.com/anithing_flutter)
 
 ## Features
 - Browse Popular, Highest Rating or Currently Airing Anime
